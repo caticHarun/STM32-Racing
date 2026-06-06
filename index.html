@@ -80,7 +80,9 @@
 	<div class="text-white p-4 fixed w-screen h-screen z-[20] backdrop-blur-sm overflow-y-auto flex items-center justify-center"
 		id="controller_start">
 		<!-- //HC_UPDATE design -->
-		<div class="p-4 bg-blue-900 text-white rounded-[20px] min-w-[400px] min-h-[200px] flex items-center justify-center">
+		<div
+			class="p-4 bg-blue-900 text-white rounded-[20px] min-w-[400px] min-h-[200px] flex items-center justify-center">
+			<!-- //HC_UPDATE remove hidden -->
 			<div id="controller_not_connected">
 				<!-- //HC_UPDATE translate -->
 
@@ -89,16 +91,33 @@
 				</p>
 				<button
 					class="bg-blue-700 rounded-[8px] px-8 py-4 mx-auto block mt-4 transition-all hover:bg-blue-500 cursor-pointer"
-					id="controller_connect_button"
-				>
+					id="controller_connect_button">
 					Connect
 				</button>
 			</div>
 
 			<div id="controller_not_started" class="hidden">
 				<p>
-					Please Start your controller
+					Please Start your controller.
+					<br>
+					Choose the second project
 				</p>
+			</div>
+
+			<div id="speed_not_set" class="hidden">
+				<p>
+					Please set the speed using the potenziometer and click play
+				</p>
+
+				<p class="speed_value">
+					0%
+				</p>
+
+				<button
+					class="bg-blue-700 rounded-[8px] px-8 py-4 mx-auto block mt-4 transition-all hover:bg-blue-500 cursor-pointer"
+					id="start_game">
+					Play
+				</button>
 			</div>
 		</div>
 	</div>

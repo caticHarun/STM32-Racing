@@ -12,16 +12,28 @@ const commands = {
 const cancel_command = "X_";
 
 // DOM
+const connect_controller = document.querySelector("#controller_start");
 const controller_not_connected_div = document.querySelector("#controller_not_connected");
 const controller_not_started_div = document.querySelector("#controller_not_started");
+const speed_not_set_div = document.querySelector("#speed_not_set");
+
+//Stats
+let speed = 0;
+const updateSpeed = (value) => {
+    speed = value;
+
+    //HC_UPDATE popravi ovo titranje izmedju 99% i 100% i slicno
+    //Speed not set div
+    if(!speed_not_set_div.classList.contains("hidden")){
+        speed_not_set_div.querySelector(".speed_value").textContent = `${speed}%`
+    }
+}
 
 // Instructions
 let instructions = "";
 
 export const connect_controller_button = () => {
     try {
-
-
         const connect_button = document.querySelector("#controller_start #controller_connect_button");
 
         connect_button.addEventListener("click", async () => {
@@ -66,6 +78,11 @@ export const connect_controller_button = () => {
                 connect_button.textContent = "Connect";
             }
         });
+
+        const play_button = speed_not_set_div.querySelector("#start_game");
+        play_button.addEventListener("click", () => {
+            connect_controller.remove()
+        })
     } catch (error) {
 
     }
@@ -94,6 +111,7 @@ const check_for_valid_instruction = () => {
             if (Number.isFinite(speed) && speed >= 0 && speed <= 100) {
                 console.log('SPEED CHANGE', speed); //HC_REMOVE
                 //HC_UPDATE
+                updateSpeed(speed);
             }
         }
     });
@@ -101,4 +119,5 @@ const check_for_valid_instruction = () => {
 
 const controller_started = () => {
     controller_not_started_div.classList.add("hidden")
+    speed_not_set_div.classList.remove("hidden")
 };
