@@ -33,7 +33,7 @@ const updateSpeed = (value) => {
 // Instructions
 let instructions = "";
 
-export let instructions_to_execute = [];
+export const instructions_to_execute = [];
 
 export const connect_controller_button = () => {
     try {

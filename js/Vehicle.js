@@ -53,6 +53,8 @@ export class Vehicle {
 
 		this.driftIntensity = 0;
 
+		this.direction = 1;
+
 	}
 
 	init( model ) {

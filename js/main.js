@@ -13,7 +13,7 @@ import { DriftMarks } from './DriftMarks.js';
 import { GameAudio } from './Audio.js';
 import { LapTimer } from './LapTimer.js';
 import { ColorMapGLTFLoader } from './Loader.js';
-import { instructions_to_execute, stm32_ready } from './STM32.js';
+import { commands, instructions_to_execute, stm32_ready } from './STM32.js';
 
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, outputBufferType: THREE.HalfFloatType });
@@ -267,14 +267,20 @@ async function init() {
 
 		// Harun Code Begin
 		if (stm32_ready) {
-			input.z = 1;
 			instructions_to_execute.forEach(instruction => {
+				if(instruction === commands.change_direction) vehicle.direction *= -1;
 				//HC_UPDATE continue
 			});
+			instructions_to_execute.splice(0, instructions_to_execute.length);
+			
+			// input.z = -1;
+
+			input.z = 1 * vehicle.direction;
 		}
 		// instructions_to_execute = [];
 		// Harun Code END
 
+		console.log('input z', input.z); //HC_REMOVE
 		vehicle.update(dt, input);
 
 		dirLight.position.set(
