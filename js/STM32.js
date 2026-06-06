@@ -23,7 +23,6 @@ export let speed = 0;
 const updateSpeed = (value) => {
     speed = value;
 
-    //HC_UPDATE popravi ovo titranje izmedju 99% i 100% i slicno
     //Speed not set div
     if (!speed_not_set_div.classList.contains("hidden")) {
         speed_not_set_div.querySelector(".speed_value").textContent = `${speed}%`;
@@ -48,8 +47,7 @@ export const connect_controller_button = () => {
                 await port.open({ baudRate: baud });
 
                 controller_not_connected_div.classList.add("hidden");
-                // controller_not_started_div.classList.remove("hidden"); //HC_UPDATE uncomment
-                ready(); //HC_REMOVE
+                controller_not_started_div.classList.remove("hidden");
 
                 while (port.readable) {
                     const reader = port.readable.getReader();
@@ -103,9 +101,6 @@ const check_for_valid_instruction = () => {
             if (instruction === command || instruction == `${cancel_command}${command}`) {
                 if (instruction === commands.connected) controller_started();
                 else instructions_to_execute.push(instruction);
-
-                console.log('COMMAND', instruction); //HC_REMOVE
-                //HC_UPDATE
             }
         });
 
@@ -114,8 +109,6 @@ const check_for_valid_instruction = () => {
             const speed = Number(instruction.replace(commands.speed, "").replace(commands.speed_end, ""));
 
             if (Number.isFinite(speed) && speed >= 0 && speed <= 100) {
-                console.log('SPEED CHANGE', speed); //HC_REMOVE
-                //HC_UPDATE
                 updateSpeed(speed);
             }
         }

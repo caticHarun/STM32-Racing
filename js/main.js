@@ -281,11 +281,8 @@ async function init() {
 			input.z = vehicle.breaking ? -1 * vehicle.direction : (2/100 * speed) * vehicle.direction;
 			input.x = vehicle.steering;
 		}
-		
-		// instructions_to_execute = [];
 		// Harun Code END
 
-		console.log('input z', input.z); //HC_REMOVE
 		vehicle.update(dt, input);
 
 		dirLight.position.set(
