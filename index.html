@@ -80,8 +80,8 @@
 	<div class="text-white p-4 fixed w-screen h-screen z-[20] backdrop-blur-sm overflow-y-auto flex items-center justify-center"
 		id="controller_start">
 		<!-- //HC_UPDATE design -->
-		<div class="p-4 bg-blue-900 text-white rounded-[20px] min-w-[400px] min-h-[200px]">
-			<div class="controller_not_connected">
+		<div class="p-4 bg-blue-900 text-white rounded-[20px] min-w-[400px] min-h-[200px] flex items-center justify-center">
+			<div id="controller_not_connected">
 				<!-- //HC_UPDATE translate -->
 
 				<p class="text-center">
@@ -93,6 +93,12 @@
 				>
 					Connect
 				</button>
+			</div>
+
+			<div id="controller_not_started" class="hidden">
+				<p>
+					Please Start your controller
+				</p>
 			</div>
 		</div>
 	</div>

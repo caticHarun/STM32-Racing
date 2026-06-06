@@ -1,5 +1,5 @@
+// Variables
 const baud = 115200;
-
 const commands = {
     connected: "Harun_Catic_STM32_Controller",
     left: "LEFT",
@@ -11,46 +11,59 @@ const commands = {
 };
 const cancel_command = "X_";
 
+// DOM
+const controller_not_connected_div = document.querySelector("#controller_not_connected");
+const controller_not_started_div = document.querySelector("#controller_not_started");
+
+// Instructions
 let instructions = "";
 
 export const connect_controller_button = () => {
     try {
-        const button = document.querySelector("#controller_start #controller_connect_button");
-        button.addEventListener("click", async () => {
-            button.textContent = "Loading"; //HC_UPDATE spinner
 
-            const port = await navigator.serial.requestPort();
-            await port.open({ baudRate: baud });
 
-            //HC_UPDATE napisi odaberite projekat 2
+        const connect_button = document.querySelector("#controller_start #controller_connect_button");
 
-            while (port.readable) {
-                const reader = port.readable.getReader();
+        connect_button.addEventListener("click", async () => {
+            connect_button.textContent = "Loading"; //HC_UPDATE spinner
+            connect_button.disabled = true;
 
-                try {
-                    while (true) {
-                        const { value, done } = await reader.read();
+            try {
+                const port = await navigator.serial.requestPort();
+                await port.open({ baudRate: baud });
 
-                        if (value === "JARIM")
-                            document.querySelector("#controller_start").remove(); //HC_UPDATE
+                controller_not_connected_div.classList.add("hidden");
+                controller_not_started_div.classList.remove("hidden");
 
-                        for (let i = 0; i < value.length; i++) {
-                            instructions += String.fromCharCode(value[i]);
+                while (port.readable) {
+                    const reader = port.readable.getReader();
+
+                    try {
+                        while (true) {
+                            const { value, done } = await reader.read();
+
+                            for (let i = 0; i < value.length; i++) {
+                                instructions += String.fromCharCode(value[i]);
+                            }
+
+                            check_for_valid_instruction();
+
+                            if (done) {
+                                // |reader| has been canceled.
+                                break;
+                            }
+                            // Do something with |value|…
                         }
-
-                        check_for_valid_instruction();
-
-                        if (done) {
-                            // |reader| has been canceled.
-                            break;
-                        }
-                        // Do something with |value|…
+                    } catch (error) {
+                        // Handle |error|…
+                    } finally {
+                        reader.releaseLock();
                     }
-                } catch (error) {
-                    // Handle |error|…
-                } finally {
-                    reader.releaseLock();
                 }
+            } catch (error) {
+                window.alert(`Error connecting a controller: ${error}`); //HC_UPDATE translate
+                connect_button.disabled = false;
+                connect_button.textContent = "Connect";
             }
         });
     } catch (error) {
@@ -67,7 +80,10 @@ const check_for_valid_instruction = () => {
     instruction_arr.forEach((instruction, index) => {
         Object.values(commands).forEach(command => {
             if (instruction === command || instruction == `${cancel_command}${command}`) {
+                if(instruction === commands.connected) controller_started()
+
                 console.log('COMMAND', instruction); //HC_REMOVE
+                //HC_UPDATE
             }
         });
 
@@ -75,9 +91,14 @@ const check_for_valid_instruction = () => {
         if (instruction.includes(commands.speed) && instruction.includes(commands.speed_end)) {
             const speed = Number(instruction.replace(commands.speed, "").replace(commands.speed_end, ""));
 
-            if(Number.isFinite(speed) && speed >= 0 && speed <= 100){
+            if (Number.isFinite(speed) && speed >= 0 && speed <= 100) {
                 console.log('SPEED CHANGE', speed); //HC_REMOVE
+                //HC_UPDATE
             }
         }
     });
+};
+
+const controller_started = () => {
+    controller_not_started_div.classList.add("hidden")
 };
