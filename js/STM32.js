@@ -20,13 +20,21 @@ const speed_not_set_div = document.querySelector("#speed_not_set");
 
 //Stats
 export let speed = 0;
+const max_display_kmh = 240;
 const updateSpeed = (value) => {
     speed = value;
 
     //Speed not set div
-    if (!speed_not_set_div.classList.contains("hidden")) {
-        speed_not_set_div.querySelector(".speed_value").textContent = `${speed}%`;
-    }
+    const speed_value = speed_not_set_div.querySelector(".speed_value");
+    const speed_kmh = speed_not_set_div.querySelector(".speed_kmh");
+    const speed_percent = speed_not_set_div.querySelector(".speed_percent");
+    const kmh = Math.round((speed / 100) * max_display_kmh);
+
+    speed_value.style.setProperty("--speed-percent", speed);
+    speed_value.style.setProperty("--speed-angle", `${speed * 1.8}deg`);
+    speed_value.style.setProperty("--needle-angle", `${-90 + speed * 1.8}deg`);
+    speed_kmh.textContent = kmh;
+    speed_percent.textContent = `${speed}%`;
 };
 
 // Instructions
@@ -39,7 +47,7 @@ export const connect_controller_button = () => {
         const connect_button = document.querySelector("#controller_start #controller_connect_button");
 
         connect_button.addEventListener("click", async () => {
-            connect_button.textContent = "Loading"; //HC_UPDATE spinner
+            connect_button.textContent = "Verbinde...";
             connect_button.disabled = true;
 
             try {
@@ -75,9 +83,9 @@ export const connect_controller_button = () => {
                     }
                 }
             } catch (error) {
-                window.alert(`Error connecting a controller: ${error}`); //HC_UPDATE translate
+                window.alert(`Fehler beim Verbinden des Controllers: ${error}`);
                 connect_button.disabled = false;
-                connect_button.textContent = "Connect";
+                connect_button.textContent = "Verbinden";
             }
         });
 

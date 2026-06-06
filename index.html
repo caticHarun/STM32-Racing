@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
 	<meta charset="utf-8">
@@ -54,6 +54,223 @@
 			width: 20px;
 			height: 20px;
 		}
+
+		.hidden {
+			display: none !important;
+		}
+
+		.controller-overlay {
+			position: fixed;
+			inset: 0;
+			z-index: 20;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 24px;
+			color: #f8fafc;
+			overflow-y: auto;
+			background:
+				linear-gradient(135deg, rgba(2, 6, 23, 0.9), rgba(15, 23, 42, 0.78)),
+				repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 12px, transparent 12px 24px);
+			backdrop-filter: blur(14px) saturate(120%);
+			-webkit-backdrop-filter: blur(14px) saturate(120%);
+		}
+
+		.controller-panel {
+			position: relative;
+			width: min(92vw, 520px);
+			min-height: 300px;
+			padding: 28px;
+			border: 1px solid rgba(148, 163, 184, 0.34);
+			border-radius: 24px;
+			overflow: hidden;
+			background:
+				linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.96)),
+				repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 9px);
+			box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+		}
+
+		.controller-panel::before {
+			content: "";
+			position: absolute;
+			inset: 0 0 auto;
+			height: 8px;
+			background:
+				repeating-linear-gradient(90deg, #f8fafc 0 18px, #0f172a 18px 36px);
+			opacity: 0.9;
+		}
+
+		.controller-panel::after {
+			content: "";
+			position: absolute;
+			inset: 8px 0 auto;
+			height: 2px;
+			background: #ef4444;
+			box-shadow: 0 0 24px rgba(239, 68, 68, 0.78);
+		}
+
+		.controller-stage {
+			position: relative;
+			display: flex;
+			min-height: 244px;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: center;
+			gap: 18px;
+		}
+
+		.racing-kicker {
+			margin: 0;
+			color: #f97316;
+			font: 700 12px/1.2 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+		}
+
+		.racing-title {
+			margin: 0;
+			font: 800 30px/1.05 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		}
+
+		.racing-copy {
+			max-width: 360px;
+			margin: 0;
+			color: #cbd5e1;
+			font: 500 16px/1.55 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		}
+
+		.racing-button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 164px;
+			min-height: 52px;
+			padding: 14px 24px;
+			border: 1px solid rgba(248, 113, 113, 0.75);
+			border-radius: 12px;
+			color: #fff;
+			background: linear-gradient(135deg, #dc2626, #f97316);
+			box-shadow: 0 16px 36px rgba(220, 38, 38, 0.34);
+			font: 800 14px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			cursor: pointer;
+			transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+		}
+
+		.racing-button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 20px 46px rgba(249, 115, 22, 0.38);
+			filter: brightness(1.08);
+		}
+
+		.racing-button:disabled {
+			cursor: wait;
+			opacity: 0.68;
+			transform: none;
+		}
+
+		.speed_value {
+			--speed-percent: 0;
+			--speed-angle: 0deg;
+			--needle-angle: -90deg;
+			width: min(100%, 340px);
+			margin: 4px auto 0;
+			padding: 18px 18px 16px;
+			border: 1px solid rgba(148, 163, 184, 0.28);
+			border-radius: 18px;
+			background: rgba(15, 23, 42, 0.82);
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+		}
+
+		.speed-gauge {
+			position: relative;
+			width: 210px;
+			height: 118px;
+			margin: 0 auto 12px;
+			overflow: hidden;
+		}
+
+		.speed-gauge::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: 210px 210px 0 0;
+			background:
+				conic-gradient(from 270deg at 50% 100%, #f97316 0deg var(--speed-angle), rgba(51, 65, 85, 0.78) var(--speed-angle) 180deg, transparent 180deg);
+			-webkit-mask: radial-gradient(circle at 50% 100%, transparent 0 52px, #000 53px);
+			mask: radial-gradient(circle at 50% 100%, transparent 0 52px, #000 53px);
+		}
+
+		.speed-needle {
+			position: absolute;
+			left: 50%;
+			bottom: 0;
+			width: 3px;
+			height: 92px;
+			border-radius: 999px;
+			background: #f8fafc;
+			box-shadow: 0 0 14px rgba(248, 250, 252, 0.7);
+			transform-origin: 50% 100%;
+			transform: translateX(-50%) rotate(var(--needle-angle));
+			transition: transform 0.18s ease-out;
+		}
+
+		.speed-readout {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 2px;
+			display: flex;
+			align-items: baseline;
+			justify-content: center;
+			gap: 8px;
+		}
+
+		.speed_kmh {
+			font: 900 48px/0.9 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.speed-unit {
+			color: #94a3b8;
+			font: 800 13px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+		}
+
+		.speed_percent {
+			margin: 0;
+			color: #f97316;
+			font: 800 16px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			font-variant-numeric: tabular-nums;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		.speed-caption {
+			margin: 8px 0 0;
+			color: #94a3b8;
+			font: 600 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+		}
+
+		@media (max-width: 520px) {
+			.controller-panel {
+				padding: 24px 18px;
+				border-radius: 18px;
+			}
+
+			.racing-title {
+				font-size: 25px;
+			}
+
+			.speed-gauge {
+				width: 190px;
+			}
+		}
 	</style>
 	<script type="importmap">
 	{
@@ -75,48 +292,53 @@
 				d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.05c-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.79.56C20.21 21.39 23.5 17.07 23.5 12 23.5 5.65 18.35.5 12 .5z" />
 		</svg>
 	</a>
-	<a id="editor-link" class="corner-link" href="editor.html">Create new track</a>
+	<a id="editor-link" class="corner-link" href="editor.html">Neue Strecke erstellen</a>
 
-	<!-- //HC_UPDATE design -->
-	<div class="text-white p-4 fixed w-screen h-screen z-[20] backdrop-blur-sm overflow-y-auto flex items-center justify-center"
-		id="controller_start">
-		<!-- //HC_UPDATE design -->
-		<div
-			class="p-4 bg-blue-900 text-white rounded-[20px] min-w-[400px] min-h-[200px] flex items-center justify-center">
-			<div id="controller_not_connected">
-				<!-- //HC_UPDATE translate -->
-
-				<p class="text-center">
-					Please connect a controller
+	<!-- Harun -->
+	<div class="controller-overlay" id="controller_start">
+		<div class="controller-panel">
+			<div class="controller-stage" id="controller_not_connected">
+				<p class="racing-kicker">STM32 Racing</p>
+				<h1 class="racing-title">Controller koppeln</h1>
+				<p class="racing-copy">
+					Verbinde deinen Controller, bevor du an die Startlinie rollst.
 				</p>
-				<button
-					class="bg-blue-700 rounded-[8px] px-8 py-4 mx-auto block mt-4 transition-all hover:bg-blue-500 cursor-pointer"
-					id="controller_connect_button">
-					Connect
+				<button class="racing-button" id="controller_connect_button">
+					Verbinden
 				</button>
 			</div>
 
-			<div id="controller_not_started" class="hidden">
-				<p>
-					Please Start your controller.
+			<div id="controller_not_started" class="controller-stage hidden">
+				<p class="racing-kicker">Bereitmachen</p>
+				<h1 class="racing-title">Controller starten</h1>
+				<p class="racing-copy">
+					Bitte starte deinen Controller.
 					<br>
-					Choose the second project
+					W&auml;hle das zweite Projekt aus.
 				</p>
 			</div>
 
-			<div id="speed_not_set" class="hidden">
-				<p>
-					Please set the speed using the potenziometer and click play
+			<div id="speed_not_set" class="controller-stage hidden">
+				<p class="racing-kicker">Launch Control</p>
+				<h1 class="racing-title">Tempo einstellen</h1>
+				<p class="racing-copy">
+					Stelle die Geschwindigkeit mit dem Potentiometer ein und klicke auf Start.
 				</p>
 
-				<p class="speed_value">
-					0%
-				</p>
+				<div class="speed_value" aria-live="polite">
+					<div class="speed-gauge">
+						<div class="speed-needle"></div>
+						<div class="speed-readout">
+							<span class="speed_kmh">0</span>
+							<span class="speed-unit">km/h</span>
+						</div>
+					</div>
+					<p class="speed_percent">0%</p>
+					<p class="speed-caption">Potentiometer</p>
+				</div>
 
-				<button
-					class="bg-blue-700 rounded-[8px] px-8 py-4 mx-auto block mt-4 transition-all hover:bg-blue-500 cursor-pointer"
-					id="start_game">
-					Play
+				<button class="racing-button" id="start_game">
+					Start
 				</button>
 			</div>
 		</div>
@@ -127,7 +349,7 @@
 		if (map) {
 			const link = document.getElementById('editor-link');
 			link.href = 'editor.html?map=' + map;
-			link.textContent = 'Edit this track';
+			link.textContent = 'Diese Strecke bearbeiten';
 		}
 	</script>
 	<script type="module" src="js/main.js"></script>
