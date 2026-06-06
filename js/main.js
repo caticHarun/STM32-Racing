@@ -13,7 +13,7 @@ import { DriftMarks } from './DriftMarks.js';
 import { GameAudio } from './Audio.js';
 import { LapTimer } from './LapTimer.js';
 import { ColorMapGLTFLoader } from './Loader.js';
-import { commands, instructions_to_execute, stm32_ready } from './STM32.js';
+import { cancel_command, commands, instructions_to_execute, speed, stm32_ready } from './STM32.js';
 
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, outputBufferType: THREE.HalfFloatType });
@@ -269,14 +269,15 @@ async function init() {
 		if (stm32_ready) {
 			instructions_to_execute.forEach(instruction => {
 				if(instruction === commands.change_direction) vehicle.direction *= -1;
+				else if(instruction === commands.break) vehicle.breaking = true;
+				else if(instruction === `${cancel_command}${commands.break}`) vehicle.breaking = false;
 				//HC_UPDATE continue
 			});
 			instructions_to_execute.splice(0, instructions_to_execute.length);
 			
-			// input.z = -1;
-
-			input.z = 1 * vehicle.direction;
+			input.z = vehicle.breaking ? -1 * vehicle.direction : (2/100 * speed) * vehicle.direction;
 		}
+		
 		// instructions_to_execute = [];
 		// Harun Code END
 

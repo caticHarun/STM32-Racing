@@ -53,7 +53,9 @@ export class Vehicle {
 
 		this.driftIntensity = 0;
 
+		// Harun
 		this.direction = 1;
+		this.breaking = false;
 
 	}
 

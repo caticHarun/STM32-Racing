@@ -9,7 +9,7 @@ export const commands = {
     speed: "SPEED_CHANGE_",
     speed_end: "_END",
 };
-const cancel_command = "X_";
+export const cancel_command = "X_";
 export let stm32_ready = 0;
 
 // DOM
@@ -19,7 +19,7 @@ const controller_not_started_div = document.querySelector("#controller_not_start
 const speed_not_set_div = document.querySelector("#speed_not_set");
 
 //Stats
-let speed = 0;
+export let speed = 0;
 const updateSpeed = (value) => {
     speed = value;
 
