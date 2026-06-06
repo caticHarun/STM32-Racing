@@ -45,7 +45,8 @@ export const connect_controller_button = () => {
                 await port.open({ baudRate: baud });
 
                 controller_not_connected_div.classList.add("hidden");
-                controller_not_started_div.classList.remove("hidden");
+                // controller_not_started_div.classList.remove("hidden"); //HC_UPDATE uncomment
+                connect_controller.remove() //HC_REMOVE
 
                 while (port.readable) {
                     const reader = port.readable.getReader();
