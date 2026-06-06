@@ -13,6 +13,7 @@ import { DriftMarks } from './DriftMarks.js';
 import { GameAudio } from './Audio.js';
 import { LapTimer } from './LapTimer.js';
 import { ColorMapGLTFLoader } from './Loader.js';
+import { instructions_to_execute, stm32_ready } from './STM32.js';
 
 
 const renderer = new THREE.WebGLRenderer( { antialias: true, outputBufferType: THREE.HalfFloatType } );
@@ -263,6 +264,16 @@ async function init() {
 		const input = controls.update();
 
 		updateWorld( world, contactListener, dt );
+
+		// Harun Code Begin
+		if(stm32_ready){
+			input.z = 1;
+			instructions_to_execute.forEach(instruction => {
+				//HC_UPDATE continue
+			})	
+		}
+		// instructions_to_execute = [];
+		// Harun Code END
 
 		vehicle.update( dt, input );
 

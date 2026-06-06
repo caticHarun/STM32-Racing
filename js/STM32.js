@@ -1,6 +1,6 @@
 // Variables
 const baud = 115200;
-const commands = {
+export const commands = {
     connected: "Harun_Catic_STM32_Controller",
     left: "LEFT",
     right: "RIGHT",
@@ -10,6 +10,7 @@ const commands = {
     speed_end: "_END",
 };
 const cancel_command = "X_";
+export let stm32_ready = 0;
 
 // DOM
 const connect_controller = document.querySelector("#controller_start");
@@ -32,6 +33,8 @@ const updateSpeed = (value) => {
 // Instructions
 let instructions = "";
 
+export let instructions_to_execute = [];
+
 export const connect_controller_button = () => {
     try {
         const connect_button = document.querySelector("#controller_start #controller_connect_button");
@@ -46,7 +49,7 @@ export const connect_controller_button = () => {
 
                 controller_not_connected_div.classList.add("hidden");
                 // controller_not_started_div.classList.remove("hidden"); //HC_UPDATE uncomment
-                connect_controller.remove() //HC_REMOVE
+                ready() //HC_REMOVE
 
                 while (port.readable) {
                     const reader = port.readable.getReader();
@@ -82,7 +85,7 @@ export const connect_controller_button = () => {
 
         const play_button = speed_not_set_div.querySelector("#start_game");
         play_button.addEventListener("click", () => {
-            connect_controller.remove()
+            ready()
         })
     } catch (error) {
 
@@ -99,6 +102,7 @@ const check_for_valid_instruction = () => {
         Object.values(commands).forEach(command => {
             if (instruction === command || instruction == `${cancel_command}${command}`) {
                 if(instruction === commands.connected) controller_started()
+                else instructions_to_execute.push(instruction)
 
                 console.log('COMMAND', instruction); //HC_REMOVE
                 //HC_UPDATE
@@ -112,7 +116,7 @@ const check_for_valid_instruction = () => {
             if (Number.isFinite(speed) && speed >= 0 && speed <= 100) {
                 console.log('SPEED CHANGE', speed); //HC_REMOVE
                 //HC_UPDATE
-                updateSpeed(speed);
+                updateSpeed(speed); 
             }
         }
     });
@@ -122,3 +126,8 @@ const controller_started = () => {
     controller_not_started_div.classList.add("hidden")
     speed_not_set_div.classList.remove("hidden")
 };
+
+const ready = () => {
+    connect_controller.remove();
+    stm32_ready = 1;
+}
