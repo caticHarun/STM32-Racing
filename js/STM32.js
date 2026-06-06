@@ -7,9 +7,9 @@ const commands = {
     break: "BREAK",
     change_direction: "CHANGE_DIRECTION",
     speed: "SPEED_CHANGE_",
-    speed_end: "_END", //HC_UPDATE make on STM32
+    speed_end: "_END",
 };
-const cancel_command = "X_"
+const cancel_command = "X_";
 
 let instructions = "";
 
@@ -34,8 +34,8 @@ export const connect_controller_button = () => {
                         if (value === "JARIM")
                             document.querySelector("#controller_start").remove(); //HC_UPDATE
 
-                        for(let i=0; i<value.length; i++){
-                            instructions += String.fromCharCode(value[i])
+                        for (let i = 0; i < value.length; i++) {
+                            instructions += String.fromCharCode(value[i]);
                         }
 
                         check_for_valid_instruction();
@@ -60,27 +60,24 @@ export const connect_controller_button = () => {
 
 const check_for_valid_instruction = () => {
     const instruction_arr = instructions.split("\n");
-    const indexes_to_remove = [];
+
+    const ret = instruction_arr.splice(instruction_arr.length - 1, 1);
+    instructions = ret;
 
     instruction_arr.forEach((instruction, index) => {
         Object.values(commands).forEach(command => {
-            if(instruction === command || instruction == `${cancel_command}${command}`) {
+            if (instruction === command || instruction == `${cancel_command}${command}`) {
                 console.log('COMMAND', instruction); //HC_REMOVE
-                indexes_to_remove.push(index);
             }
+        });
 
-            else if(instruction.includes(commands.speed)){
-                const speed = Number(instruction.replace(commands.speed, ""));
-                console.log('Speed', speed); //HC_REMOVE
-                indexes_to_remove.push(index);
+
+        if (instruction.includes(commands.speed) && instruction.includes(commands.speed_end)) {
+            const speed = Number(instruction.replace(commands.speed, "").replace(commands.speed_end, ""));
+
+            if(Number.isFinite(speed) && speed >= 0 && speed <= 100){
+                console.log('SPEED CHANGE', speed); //HC_REMOVE
             }
-        })
-    })
-
-    indexes_to_remove.reverse();
-    indexes_to_remove.forEach(index => {
-        instruction_arr.splice(index, 1);
-    })
-
-    instructions = instruction_arr.filter(el => !!el.trim()).join("\n");
-}
+        }
+    });
+};
