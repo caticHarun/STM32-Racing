@@ -1,3 +1,5 @@
+import { connect_controller_button } from "./STM32.js";
+
 export class Controls {
 
 	constructor() {
@@ -18,6 +20,8 @@ export class Controls {
 		window.addEventListener( 'keyup', ( e ) => this.keys[ e.code ] = false );
 
 		this.setupTouchUI();
+
+		connect_controller_button()
 
 	}
 
