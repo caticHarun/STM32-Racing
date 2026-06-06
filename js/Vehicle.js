@@ -56,6 +56,7 @@ export class Vehicle {
 		// Harun
 		this.direction = 1;
 		this.breaking = false;
+		this.steering = 0;
 
 	}
 

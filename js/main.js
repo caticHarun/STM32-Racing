@@ -271,11 +271,15 @@ async function init() {
 				if(instruction === commands.change_direction) vehicle.direction *= -1;
 				else if(instruction === commands.break) vehicle.breaking = true;
 				else if(instruction === `${cancel_command}${commands.break}`) vehicle.breaking = false;
-				//HC_UPDATE continue
+				else if(instruction === commands.left) vehicle.steering = -1;
+				else if(instruction === commands.right) vehicle.steering = 1;
+				else if(instruction === `${cancel_command}${commands.left}` && vehicle.steering === -1) vehicle.steering = 0;
+				else if(instruction === `${cancel_command}${commands.right}` && vehicle.steering === 1) vehicle.steering = 0;
 			});
 			instructions_to_execute.splice(0, instructions_to_execute.length);
 			
 			input.z = vehicle.breaking ? -1 * vehicle.direction : (2/100 * speed) * vehicle.direction;
+			input.x = vehicle.steering;
 		}
 		
 		// instructions_to_execute = [];
