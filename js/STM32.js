@@ -20,21 +20,44 @@ const speed_not_set_div = document.querySelector("#speed_not_set");
 
 //Stats
 export let speed = 0;
-const max_display_kmh = 240;
-const updateSpeed = (value) => {
-    speed = value;
+export let display_direction = 1;
+const forward_max_display_kmh = 240;
+const reverse_max_display_kmh = 80;
 
-    //Speed not set div
-    const speed_value = speed_not_set_div.querySelector(".speed_value");
-    const speed_kmh = speed_not_set_div.querySelector(".speed_kmh");
-    const speed_percent = speed_not_set_div.querySelector(".speed_percent");
+const updateSpeedDisplays = () => {
+    const max_display_kmh = display_direction === -1 ? reverse_max_display_kmh : forward_max_display_kmh;
     const kmh = Math.round((speed / 100) * max_display_kmh);
 
-    speed_value.style.setProperty("--speed-percent", speed);
-    speed_value.style.setProperty("--speed-angle", `${speed * 1.8}deg`);
-    speed_value.style.setProperty("--needle-angle", `${-90 + speed * 1.8}deg`);
-    speed_kmh.textContent = kmh;
-    speed_percent.textContent = `${speed}%`;
+    document.querySelectorAll(".speed_value").forEach((speed_value) => {
+        const speed_kmh = speed_value.querySelector(".speed_kmh");
+        const speed_percent = speed_value.querySelector(".speed_percent");
+
+        speed_value.style.setProperty("--speed-percent", speed);
+        speed_value.style.setProperty("--speed-angle", `${speed * 1.8}deg`);
+        speed_value.style.setProperty("--needle-angle", `${-90 + speed * 1.8}deg`);
+
+        if (speed_kmh) speed_kmh.textContent = kmh;
+        if (speed_percent) speed_percent.textContent = `${speed}%`;
+    });
+};
+
+export const updateVehicleDirectionDisplay = (direction) => {
+    display_direction = direction === -1 ? -1 : 1;
+
+    document.querySelectorAll(".race-hud").forEach((hud) => {
+        const direction_label = hud.querySelector(".direction-label");
+
+        hud.classList.toggle("direction-backward", display_direction === -1);
+        hud.classList.toggle("direction-forward", display_direction !== -1);
+        if (direction_label) direction_label.innerHTML = display_direction === -1 ? "R&uuml;ckw&auml;rts" : "Vorw&auml;rts";
+    });
+
+    updateSpeedDisplays();
+};
+
+const updateSpeed = (value) => {
+    speed = value;
+    updateSpeedDisplays();
 };
 
 // Instructions

@@ -37,11 +37,6 @@
 			background: #fff;
 		}
 
-		#editor-link {
-			bottom: 12px;
-			right: 12px;
-		}
-
 		#github-link {
 			top: 12px;
 			right: 12px;
@@ -257,6 +252,119 @@
 			text-transform: uppercase;
 		}
 
+		.race-hud {
+			position: fixed;
+			right: 12px;
+			bottom: 12px;
+			z-index: 10;
+			display: grid;
+			grid-template-columns: auto auto;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 14px;
+			border: 1px solid rgba(148, 163, 184, 0.34);
+			border-radius: 16px;
+			color: #f8fafc;
+			background: rgba(2, 6, 23, 0.82);
+			box-shadow: 0 18px 44px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+			backdrop-filter: blur(14px) saturate(120%);
+			-webkit-backdrop-filter: blur(14px) saturate(120%);
+		}
+
+		.race-hud .speed_value {
+			width: 168px;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			border-radius: 0;
+			background: transparent;
+			box-shadow: none;
+		}
+
+		.race-hud .speed-gauge {
+			width: 150px;
+			height: 84px;
+			margin-bottom: 8px;
+		}
+
+		.race-hud .speed-gauge::before {
+			border-radius: 150px 150px 0 0;
+			-webkit-mask: radial-gradient(circle at 50% 100%, transparent 0 36px, #000 37px);
+			mask: radial-gradient(circle at 50% 100%, transparent 0 36px, #000 37px);
+		}
+
+		.race-hud .speed-needle {
+			height: 66px;
+		}
+
+		.race-hud .speed-readout {
+			bottom: 0;
+		}
+
+		.race-hud .speed_kmh {
+			font-size: 34px;
+		}
+
+		.race-hud .speed-unit {
+			font-size: 11px;
+		}
+
+		.race-hud .speed-caption {
+			display: none;
+		}
+
+		.direction-widget {
+			display: grid;
+			justify-items: center;
+			gap: 8px;
+			min-width: 54px;
+		}
+
+		.direction-arrow {
+			position: relative;
+			width: 36px;
+			height: 58px;
+			filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.65));
+			transition: transform 0.18s ease-out;
+		}
+
+		.direction-arrow::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: 0;
+			width: 0;
+			height: 0;
+			border-left: 18px solid transparent;
+			border-right: 18px solid transparent;
+			border-bottom: 24px solid #f97316;
+			transform: translateX(-50%);
+		}
+
+		.direction-arrow::after {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: 22px;
+			width: 13px;
+			height: 36px;
+			border-radius: 999px;
+			background: #f97316;
+			transform: translateX(-50%);
+		}
+
+		.direction-backward .direction-arrow {
+			transform: rotate(180deg);
+		}
+
+		.direction-label {
+			margin: 0;
+			color: #cbd5e1;
+			font: 800 10px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+		}
+
 		@media (max-width: 520px) {
 			.controller-panel {
 				padding: 24px 18px;
@@ -269,6 +377,12 @@
 
 			.speed-gauge {
 				width: 190px;
+			}
+
+			.race-hud {
+				left: 12px;
+				right: 12px;
+				grid-template-columns: 1fr auto;
 			}
 		}
 	</style>
@@ -292,7 +406,24 @@
 				d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.05c-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.5 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.79.56C20.21 21.39 23.5 17.07 23.5 12 23.5 5.65 18.35.5 12 .5z" />
 		</svg>
 	</a>
-	<a id="editor-link" class="corner-link" href="editor.html">Neue Strecke erstellen</a>
+
+	<div class="race-hud direction-forward" id="race_hud" aria-live="polite">
+		<div class="speed_value">
+			<div class="speed-gauge">
+				<div class="speed-needle"></div>
+				<div class="speed-readout">
+					<span class="speed_kmh">0</span>
+					<span class="speed-unit">km/h</span>
+				</div>
+			</div>
+			<p class="speed_percent">0%</p>
+			<p class="speed-caption">Potentiometer</p>
+		</div>
+		<div class="direction-widget">
+			<div class="direction-arrow" aria-hidden="true"></div>
+			<p class="direction-label">Vorw&auml;rts</p>
+		</div>
+	</div>
 
 	<!-- Harun -->
 	<div class="controller-overlay" id="controller_start">
@@ -344,14 +475,6 @@
 		</div>
 	</div>
 
-	<script>
-		const map = new URLSearchParams(location.search).get('map');
-		if (map) {
-			const link = document.getElementById('editor-link');
-			link.href = 'editor.html?map=' + map;
-			link.textContent = 'Diese Strecke bearbeiten';
-		}
-	</script>
 	<script type="module" src="js/main.js"></script>
 </body>
 
